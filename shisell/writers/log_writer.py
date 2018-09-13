@@ -1,9 +1,16 @@
 import json
 import logging
+
 from ..analytics_event_model import AnalyticsEventModel
 
-__log = logging.getLogger('shisell')
+
+def create_log_writer(log_name='shisell'):
+    logger = logging.getLogger(log_name)
+
+    def writer(event_model: AnalyticsEventModel):
+        logger.info(json.dumps(event_model.__dict__))
+
+    return writer
 
 
-def log_writer(event_model: AnalyticsEventModel):
-    __log.info(json.dumps(event_model))
+log_writer = create_log_writer()
