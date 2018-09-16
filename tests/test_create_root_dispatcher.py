@@ -18,6 +18,7 @@ def create_event_model():
     return event_model
 
 
+@mock_datetime_now(EVENT_TIME, datetime)
 class CreateRootDispatcherTestSuite(unittest.TestCase):
     def setUp(self):
         event_model_writer = Mock()
@@ -30,31 +31,29 @@ class CreateRootDispatcherTestSuite(unittest.TestCase):
         """
         should concatenate scopes with _
         """
-        with mock_datetime_now(EVENT_TIME, datetime):
-            scope1 = 'scope1'
-            scope2 = 'scope2'
-            event_model = create_event_model()
-            event_model.Scope = scope1 + '_' + scope2
+        scope1 = 'scope1'
+        scope2 = 'scope2'
+        event_model = create_event_model()
+        event_model.Scope = scope1 + '_' + scope2
 
-            result = self.dispatcher.extend(create_scoped(scope1), create_scoped(scope2)).dispatch(EVENT_NAME)
+        result = self.dispatcher.extend(create_scoped(scope1), create_scoped(scope2)).dispatch(EVENT_NAME)
 
-            self.assertEqual(result.get(), RETURN_VALUE)
-            self.event_model_writer.assert_called_once_with(event_model)
+        self.assertEqual(result.get(), RETURN_VALUE)
+        self.event_model_writer.assert_called_once_with(event_model)
 
     def test_identities(self):
         """
         should copy identities
         """
-        with mock_datetime_now(EVENT_TIME, datetime):
-            key = 'some_key'
-            value = 'some_value'
-            event_model = create_event_model()
-            event_model.Identities[key] = value
+        key = 'some_key'
+        value = 'some_value'
+        event_model = create_event_model()
+        event_model.Identities[key] = value
 
-            result = self.dispatcher.extend(with_identity(key, value)).dispatch(EVENT_NAME)
+        result = self.dispatcher.extend(with_identity(key, value)).dispatch(EVENT_NAME)
 
-            self.assertEqual(result.get(), RETURN_VALUE)
-            self.event_model_writer.assert_called_once_with(event_model)
+        self.assertEqual(result.get(), RETURN_VALUE)
+        self.event_model_writer.assert_called_once_with(event_model)
 
     def test_run_all_filters(self):
         """
@@ -67,15 +66,14 @@ class CreateRootDispatcherTestSuite(unittest.TestCase):
         def filter2(model: AnalyticsEventModel):
             model.ExtraData["key2"] = "value2"
 
-        with mock_datetime_now(EVENT_TIME, datetime):
-            event_model = create_event_model()
-            filter1(event_model)
-            filter2(event_model)
+        event_model = create_event_model()
+        filter1(event_model)
+        filter2(event_model)
 
-            result = self.dispatcher.extend(with_filter(filter1, filter2)).dispatch(EVENT_NAME)
+        result = self.dispatcher.extend(with_filter(filter1, filter2)).dispatch(EVENT_NAME)
 
-            self.assertEqual(result.get(), RETURN_VALUE)
-            self.event_model_writer.assert_called_once_with(event_model)
+        self.assertEqual(result.get(), RETURN_VALUE)
+        self.event_model_writer.assert_called_once_with(event_model)
 
     def test_run_filters_sequentially(self):
         """
@@ -87,14 +85,13 @@ class CreateRootDispatcherTestSuite(unittest.TestCase):
         def last_filter(model: AnalyticsEventModel):
             model.ExtraData["key"] = "lastFilter"
 
-        with mock_datetime_now(EVENT_TIME, datetime):
-            event_model = create_event_model()
-            last_filter(event_model)
+        event_model = create_event_model()
+        last_filter(event_model)
 
-            result = self.dispatcher.extend(with_filter(first_filter), with_filter(last_filter)).dispatch(EVENT_NAME)
+        result = self.dispatcher.extend(with_filter(first_filter), with_filter(last_filter)).dispatch(EVENT_NAME)
 
-            self.assertEqual(result.get(), RETURN_VALUE)
-            self.event_model_writer.assert_called_once_with(event_model)
+        self.assertEqual(result.get(), RETURN_VALUE)
+        self.event_model_writer.assert_called_once_with(event_model)
 
 
 if __name__ == '__main__':
