@@ -16,13 +16,7 @@ class AnalyticsContext:
         if other is self:
             return True
 
-        return (
-                self.Scopes == other.Scopes
-                and self.ExtraData == other.ExtraData
-                and self.MetaData == other.MetaData
-                and self.Filters == other.Filters
-                and self.Identities == other.Identities
-        )
+        return self.__dict__ == other.__dict__
 
     def union(self, other):
         union = copy.deepcopy(self)

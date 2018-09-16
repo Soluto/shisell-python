@@ -13,10 +13,4 @@ class AnalyticsEventModel:
         if other is self:
             return True
 
-        return (
-                self.Scope == other.Scope
-                and self.Name == other.Name
-                and self.MetaData == other.MetaData
-                and self.ExtraData == other.ExtraData
-                and self.Identities == other.Identities
-        )
+        return self.__dict__ == other.__dict__
