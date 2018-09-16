@@ -4,6 +4,7 @@ from .analytics_event_model import AnalyticsEventModel
 from .analytics_context import AnalyticsContext
 from .analytics_dispatcher import AnalyticsDispatcher
 from .filters import default_filters
+from .extenders import with_filter
 
 
 def create_event_model(event_name: str, context: AnalyticsContext):
@@ -30,4 +31,4 @@ def create_root_dispatcher(event_model_writer, root_context: AnalyticsContext = 
     def dispatch_in_background(name, context):
         return pool.apply_async(dispatch, (name, context))
 
-    return AnalyticsDispatcher(dispatch_in_background, root_context).with_filters(default_filters)
+    return AnalyticsDispatcher(dispatch_in_background, root_context).extend(with_filter(*default_filters))

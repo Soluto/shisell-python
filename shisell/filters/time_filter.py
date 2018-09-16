@@ -1,5 +1,5 @@
 import datetime
-from ..analytics_event_model import AnalyticsEventModel
+from .. import AnalyticsEventModel
 
 
 def time_filter(event_model: AnalyticsEventModel):

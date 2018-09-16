@@ -3,6 +3,7 @@ import unittest
 from unittest.mock import Mock
 
 from shisell import create_root_dispatcher, AnalyticsEventModel
+from shisell.extenders import create_scoped, with_identity, with_filter
 from .mock_datetime import mock_datetime_now, real_datetime_class
 
 RETURN_VALUE = 'some_return_value'
@@ -35,7 +36,7 @@ class CreateRootDispatcherTestSuite(unittest.TestCase):
             event_model = create_event_model()
             event_model.Scope = scope1 + '_' + scope2
 
-            result = self.dispatcher.create_scoped(scope1).create_scoped(scope2).dispatch(EVENT_NAME)
+            result = self.dispatcher.extend(create_scoped(scope1), create_scoped(scope2)).dispatch(EVENT_NAME)
 
             self.assertEqual(result.get(), RETURN_VALUE)
             self.event_model_writer.assert_called_once_with(event_model)
@@ -50,7 +51,7 @@ class CreateRootDispatcherTestSuite(unittest.TestCase):
             event_model = create_event_model()
             event_model.Identities[key] = value
 
-            result = self.dispatcher.with_identity(key, value).dispatch(EVENT_NAME)
+            result = self.dispatcher.extend(with_identity(key, value)).dispatch(EVENT_NAME)
 
             self.assertEqual(result.get(), RETURN_VALUE)
             self.event_model_writer.assert_called_once_with(event_model)
@@ -71,7 +72,7 @@ class CreateRootDispatcherTestSuite(unittest.TestCase):
             filter1(event_model)
             filter2(event_model)
 
-            result = self.dispatcher.with_filters([filter1, filter2]).dispatch(EVENT_NAME)
+            result = self.dispatcher.extend(with_filter(filter1, filter2)).dispatch(EVENT_NAME)
 
             self.assertEqual(result.get(), RETURN_VALUE)
             self.event_model_writer.assert_called_once_with(event_model)
@@ -90,7 +91,7 @@ class CreateRootDispatcherTestSuite(unittest.TestCase):
             event_model = create_event_model()
             last_filter(event_model)
 
-            result = self.dispatcher.with_filter(first_filter).with_filter(last_filter).dispatch(EVENT_NAME)
+            result = self.dispatcher.extend(with_filter(first_filter), with_filter(last_filter)).dispatch(EVENT_NAME)
 
             self.assertEqual(result.get(), RETURN_VALUE)
             self.event_model_writer.assert_called_once_with(event_model)
