@@ -1,0 +1,13 @@
+language: python
+python:
+- '3.6'
+script:
+- python -m unittest -v
+deploy:
+  provider: pypi
+  user: soluto
+  password:
+    secure: XuFRUotUCTbnx7H3UhVvyx3vYpRWiCI5+UxK/y6PiCX9ZhW9kl1L3CHb/IhZS6vXzASKBmdnSBaly4IEvMCoqAnQ6vGz4aT16iFIk1vfsDIUg5FEKCdHLC9O+5uGHcyzH3uDj7hvAu1a01OrfNjvLndPpBgpxEZHRgrYf6a3SfG6A9G1nqQbtQOXqfxwSb4+pDykasiF3B9KPBVjUAtlSPfOWmZmZio2Tk4zZJsH4o+pR1oJ1Mv983DvkAdlu1OObjcryU69IEhHRW1oXb8Z6lBRlfWNoW1N5NmHfhnKd2wO5YMnXCsAe2paHcqsLRGNIT9La4xiaxSTvrVR0/d0cpdmFqYZK5DB4WdcOBVl1BsE2Y/ydDAlJ91kXmmRmTVAPly1D1l2qfGCk5LJN2dPl2DWxU8knv1khLMp+XEDuRetb0EMteyyuoC4VcOp5LXa8QQRCV/8uoMfk8yjw21nbHdAZfsSUTB55+CWPOoYqYIek2iey44APoR9zxVZZtD7uWhv6RNdVlmtBHqRo6zeG4jp5P0W+MSognwhDRxidZLiQvcsay9vndCYDY3fCTA8pdF1rugOmSKGm0D2TRnhFy9fn7BXFTqweysSiSLzPJYlZ+/wdy7iOSUPmLn5sYaKdQbZZTc1AahgrKKvkD2nisLa5ls71HKjSUubUJKlpvA=
+  on:
+    tags: true
+    branch: master
