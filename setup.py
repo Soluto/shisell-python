@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="shisell",
-    version="0.1.0",
+    version="1.0.0",
     author="Soluto",
     author_email="it@soluto.com",
     description="Shisell is a service agnostic abstraction for analytic dispatchers.",
