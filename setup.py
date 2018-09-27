@@ -11,7 +11,7 @@ setup(
     description="Shisell is a service agnostic abstraction for analytic dispatchers.",
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url="https://github.com/Soluto-Private/shisell-python",
+    url="https://github.com/Soluto/shisell-python",
     packages=find_packages(exclude=('tests',)),
     include_package_data=True,
     license='MIT',
